@@ -30,6 +30,13 @@ namespace DemoView.Controllers
             Session["LoginUser"] = false;
             return Json(new { Result = false });
         }
+
+        public ActionResult Logout()
+        {
+            Session["LoginUser"] = false;
+
+            return RedirectToAction("Login");
+        }
         
     }
 }

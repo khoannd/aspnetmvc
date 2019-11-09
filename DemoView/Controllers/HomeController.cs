@@ -10,7 +10,7 @@ namespace DemoView.Controllers
     {
         public ActionResult Index()
         {
-            return View("AboutMe");
+            return View();
         }
 
         public ActionResult About()

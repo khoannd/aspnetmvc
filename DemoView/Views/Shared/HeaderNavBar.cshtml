@@ -11,6 +11,13 @@
         <li>@Html.ActionLink("Home", "Index", "Home")</li>
         <li>@Html.ActionLink("About", "About", "Home")</li>
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-        <li>@Html.ActionLink("Login", "Login", "User")</li>
+        @if (Session["LoginUser"] == null || (bool)Session["LoginUser"] == false)
+        {
+            <li>@Html.ActionLink("Login", "Login", "User")</li>
+        }
+        @if (Session["LoginUser"] != null && (bool)Session["LoginUser"])
+        {
+            <li>@Html.ActionLink("Logout", "Logout", "User")</li>
+        }
     </ul>
 </div>
