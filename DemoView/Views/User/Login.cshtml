@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    string tip = "Please enter your login";
+}
+
+<h2>Login</h2>
+<h3>@tip</h3>
+<div>
+    @Html.Label("Username")
+    @Html.TextBox("username")
+
+    @Html.Label("Password")
+    @Html.Password("password")
+
+    <button onclick="login()">Login</button>
+
+</div>
