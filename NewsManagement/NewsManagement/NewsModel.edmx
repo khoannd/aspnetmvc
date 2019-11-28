@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="NewsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="NewsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -31,6 +31,9 @@
           <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Content" Type="varchar(max)" Nullable="false" />
           <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="ShortDesc" Type="nvarchar" MaxLength="255" />
+          <Property Name="ImageUrl" Type="nvarchar" MaxLength="255" />
+          <Property Name="Published" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="NewsCategory">
           <Key>
@@ -121,8 +124,7 @@
             <End Role="NewsCategory" EntitySet="NewsCategory" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="NewsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -157,6 +159,9 @@
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_News" FromRole="News" ToRole="Comment" />
           <NavigationProperty Name="User" Relationship="Self.FK_News_User" FromRole="News" ToRole="User" />
           <NavigationProperty Name="Categories" Relationship="Self.NewsCategory" FromRole="News" ToRole="Category" />
+          <Property Name="ShortDesc" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ImageUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Published" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -243,6 +248,9 @@
           <EntitySetMapping Name="News">
             <EntityTypeMapping TypeName="NewsModel.News">
               <MappingFragment StoreEntitySet="News">
+                <ScalarProperty Name="Published" ColumnName="Published" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="ShortDesc" ColumnName="ShortDesc" />
                 <ScalarProperty Name="NewsID" ColumnName="NewsID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />

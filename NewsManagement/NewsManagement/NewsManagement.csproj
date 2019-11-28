@@ -141,7 +141,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Class1.cs" />
+    <Compile Include="Models\NewsViewModel.cs" />
+    <Compile Include="Models\UserCustom.cs" />
     <Compile Include="News.cs">
       <DependentUpon>NewsModel.tt</DependentUpon>
     </Compile>

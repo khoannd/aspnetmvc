@@ -11,16 +11,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            Title
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Content)
+            Short Description
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreatedTime)
+            News Time
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.UserName)
+            User Name
         </th>
         <th></th>
     </tr>
@@ -31,7 +31,7 @@
             @Html.DisplayFor(modelItem => item.Title)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Content)
+            @Html.DisplayFor(modelItem => item.ShortDesc)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreatedTime)

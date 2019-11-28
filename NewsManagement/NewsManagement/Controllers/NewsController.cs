@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using NewsManagement;
+using NewsManagement.Models;
 
 namespace NewsManagement.Controllers
 {
@@ -40,6 +41,11 @@ namespace NewsManagement.Controllers
         public ActionResult Create()
         {
             ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName");
+            ViewBag.Categories = 
+                new SelectList(
+                    db.Categories.Select(c => new { Text = c.Name, Value = c.CategoryID }).ToList()
+                    , "Value"
+                    , "Text");
             return View();
         }
 
@@ -48,11 +54,27 @@ namespace NewsManagement.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "NewsID,UserID,Title,Content,CreatedTime")] News news)
+        public ActionResult Create(NewsViewModel news, HttpPostedFileBase ImageFile)
         {
             if (ModelState.IsValid)
             {
-                db.News.Add(news);
+                var newNews = new News();
+                news.UpdateNews(newNews);
+
+                //always check if the object null before usage
+                if (news.CategoryID != null)
+                {
+                    foreach (var cID in news.CategoryID)
+                    {
+                        var category = db.Categories.Find(cID);
+                        if (category != null)
+                        {
+                            newNews.Categories.Add(category);
+                        }
+                    }
+                }
+                
+                db.News.Add(newNews);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
