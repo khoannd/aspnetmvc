@@ -39,7 +39,10 @@ namespace NewsFri
         public ActionResult Create()
         {
             ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName");
-            return View();
+
+            News news = new News();
+            news.CreatedDate = DateTime.Now;
+            return View(news);
         }
 
         // POST: News/Create
@@ -47,10 +50,20 @@ namespace NewsFri
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "NewsID,UserID,Title,ShortDesc,LongDesc,CreatedDate")] News news)
+        public ActionResult Create([Bind(Include = "NewsID,UserID,Title,ShortDesc,LongDesc,CreatedDate")] News news,
+            HttpPostedFileBase ImageFile)
         {
             if (ModelState.IsValid)
             {
+                //post something.png, server stores the file to /NewsImages/
+                // so the relative image url = /NewsImages/something.png
+                string ImageDir = "/NewsImages/";
+                string relativePath = ImageDir + ImageFile.FileName;
+                ImageDir = Server.MapPath(ImageDir);
+                System.IO.Directory.CreateDirectory(ImageDir);
+                string fullPath = ImageDir + ImageFile.FileName;
+                ImageFile.SaveAs(fullPath);
+                news.ImageUrl = relativePath;
                 db.News.Add(news);
                 db.SaveChanges();
                 return RedirectToAction("Index");

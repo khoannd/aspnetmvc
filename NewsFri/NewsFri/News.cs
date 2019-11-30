@@ -11,7 +11,8 @@ namespace NewsFri
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web.Mvc;
+
     public partial class News
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,8 +26,11 @@ namespace NewsFri
         public int UserID { get; set; }
         public string Title { get; set; }
         public string ShortDesc { get; set; }
+        [AllowHtml]
         public string LongDesc { get; set; }
         public System.DateTime CreatedDate { get; set; }
+        public string ImageUrl { get; set; }
+        public bool Published { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments { get; set; }

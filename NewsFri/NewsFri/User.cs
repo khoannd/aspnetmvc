@@ -11,8 +11,7 @@ namespace NewsFri
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,9 +21,6 @@ namespace NewsFri
         }
     
         public int UserID { get; set; }
-        [Required(ErrorMessage = "The user name is required")]
-        [MaxLength(20)]
-        [RegularExpression("^[A-Za-z]?[A-Za-z]*[0-9]*$")]
         public string UserName { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }

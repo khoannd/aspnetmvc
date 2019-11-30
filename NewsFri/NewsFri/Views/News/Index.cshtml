@@ -12,6 +12,9 @@
 <table class="table">
     <tr>
         <th>
+            Image
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Title)
         </th>
         <th>
@@ -30,28 +33,31 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ShortDesc)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LongDesc)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.UserName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.NewsID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.NewsID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.NewsID })
-        </td>
-    </tr>
+<tr>
+    <td>
+        <img src="@item.ImageUrl" height="50" width="50" />
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Title)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ShortDesc)
+    </td>
+    <td>
+        @Html.Raw(item.LongDesc)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreatedDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.User.UserName)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.NewsID }) |
+        @Html.ActionLink("Details", "Details", new { id = item.NewsID }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.NewsID })
+    </td>
+</tr>
 }
 
 </table>
