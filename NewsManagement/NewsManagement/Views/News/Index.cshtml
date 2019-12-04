@@ -11,6 +11,9 @@
 <table class="table">
     <tr>
         <th>
+            Image
+        </th>
+        <th>
             Title
         </th>
         <th>
@@ -27,6 +30,9 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            <img src="@item.ImageUrl" with="50" height="50" />
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.Title)
         </td>

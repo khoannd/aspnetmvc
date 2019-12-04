@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,6 +23,7 @@ namespace NewsManagement.Models
             Published = news.Published;
             Comments = news.Comments;
             Categories = news.Categories;
+            CategoryID = news.Categories.Select(c => c.CategoryID).ToList();
             User = news.User;
         }
 
@@ -40,8 +42,10 @@ namespace NewsManagement.Models
         {
 
         }
+        
         public int NewsID { get; set; }
         public int UserID { get; set; }
+        [Required]
         public string Title { get; set; }
         [AllowHtml]
         public string Content { get; set; }

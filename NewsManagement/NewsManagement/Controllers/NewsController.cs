@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -46,7 +47,9 @@ namespace NewsManagement.Controllers
                     db.Categories.Select(c => new { Text = c.Name, Value = c.CategoryID }).ToList()
                     , "Value"
                     , "Text");
-            return View();
+            NewsViewModel news = new NewsViewModel();
+            news.CreatedTime = DateTime.Now;
+            return View(news);
         }
 
         // POST: News/Create
@@ -54,17 +57,38 @@ namespace NewsManagement.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(NewsViewModel news, HttpPostedFileBase ImageFile)
+        public ActionResult Create(NewsViewModel newsViewModel, HttpPostedFileBase ImageFile)
         {
             if (ModelState.IsValid)
             {
                 var newNews = new News();
-                news.UpdateNews(newNews);
+
+                // save image to disk
+                // /NewsImages/imagename.png
+
+                // create relative path
+                string relativePath = "/NewsImages/" + DateTime.Now.Ticks.ToString() + "_" + ImageFile.FileName;
+                // map the relative to physical path
+                string physicalPath = Server.MapPath(relativePath);
+
+                
+                // check if the image folder exists
+                string imageFolder = Path.GetDirectoryName(physicalPath);
+                if (!Directory.Exists(imageFolder))
+                {
+                    Directory.CreateDirectory(imageFolder);
+                }
+
+                // save the image to physical path
+                ImageFile.SaveAs(physicalPath);
+                newsViewModel.ImageUrl = relativePath;
+
+                newsViewModel.UpdateNews(newNews);
 
                 //always check if the object null before usage
-                if (news.CategoryID != null)
+                if (newsViewModel.CategoryID != null)
                 {
-                    foreach (var cID in news.CategoryID)
+                    foreach (var cID in newsViewModel.CategoryID)
                     {
                         var category = db.Categories.Find(cID);
                         if (category != null)
@@ -79,8 +103,8 @@ namespace NewsManagement.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName", news.UserID);
-            return View(news);
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName", newsViewModel.UserID);
+            return View(newsViewModel);
         }
 
         // GET: News/Edit/5
@@ -95,8 +119,16 @@ namespace NewsManagement.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName", news.UserID);
-            return View(news);
+            ViewBag.Categories =
+                new SelectList(
+                    db.Categories.Select(c => new { Text = c.Name, Value = c.CategoryID }).ToList()
+                    , "Value"
+                    , "Text");
+
+            NewsViewModel newsViewModel = new NewsViewModel(news);
+
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName", newsViewModel.UserID);
+            return View(newsViewModel);
         }
 
         // POST: News/Edit/5
@@ -104,16 +136,61 @@ namespace NewsManagement.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "NewsID,UserID,Title,Content,CreatedTime")] News news)
+        public ActionResult Edit(NewsViewModel newsViewModel, HttpPostedFileBase ImageFile)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(news).State = EntityState.Modified;
+                var newNews = db.News.Find(newsViewModel.NewsID);
+                if (newNews == null)
+                {
+                    return HttpNotFound();
+                }
+
+                // save image to disk
+                // /NewsImages/imagename.png
+                if (ImageFile != null)
+                {
+                    // create relative path
+                    string relativePath = "/NewsImages/" + DateTime.Now.Ticks.ToString() + "_" + ImageFile.FileName;
+                    // map the relative to physical path
+                    string physicalPath = Server.MapPath(relativePath);
+
+
+                    // check if the image folder exists
+                    string imageFolder = Path.GetDirectoryName(physicalPath);
+                    if (!Directory.Exists(imageFolder))
+                    {
+                        Directory.CreateDirectory(imageFolder);
+                    }
+
+                    // save the image to physical path
+                    ImageFile.SaveAs(physicalPath);
+                    newsViewModel.ImageUrl = relativePath;
+                }                
+
+                newsViewModel.UpdateNews(newNews);
+
+                newNews.Categories.Clear();
+
+                //always check if the object null before usage
+                if (newsViewModel.CategoryID != null)
+                {
+                    foreach (var cID in newsViewModel.CategoryID)
+                    {
+                        var category = db.Categories.Find(cID);
+                        if (category != null)
+                        {
+                            newNews.Categories.Add(category);
+                        }
+                    }
+                }
+
+                db.Entry(newNews).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName", news.UserID);
-            return View(news);
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName", newsViewModel.UserID);
+            return View(newsViewModel);
         }
 
         // GET: News/Delete/5
