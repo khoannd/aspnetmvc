@@ -11,7 +11,8 @@ namespace NewsManagement
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel;
+
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,8 +22,10 @@ namespace NewsManagement
         }
     
         public int UserID { get; set; }
+        [DisplayName("User name")]
         public string UserName { get; set; }
         public string Password { get; set; }
+        [DisplayName("Full name")]
         public string FullName { get; set; }
         public bool Active { get; set; }
     

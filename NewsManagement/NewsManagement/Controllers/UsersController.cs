@@ -9,6 +9,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using NewsManagement;
+using NewsManagement.Models;
 
 namespace NewsManagement.Controllers
 {
@@ -132,6 +133,45 @@ namespace NewsManagement.Controllers
         public ActionResult Login()
         {
             return View("Login");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(UserCustom userModelView)
+        {
+            if (ModelState.IsValid)
+            {
+                if(!string.IsNullOrEmpty(userModelView.UserName)
+                    && !string.IsNullOrEmpty(userModelView.Password))
+                {
+                    string password = EncMD5(userModelView.Password.Trim());
+                    var user = db.Users.FirstOrDefault(u => u.UserName == userModelView.UserName.Trim() && u.Password == password && u.Active);
+                    
+                    if(user != null)
+                    {
+                        Session["UserID"] = user.UserID;
+                        //Response.Cookies.Add(new HttpCookie("UserID", user.UserID.ToString())); // if we want to use cookie
+                        return RedirectToAction("Index", "News");
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "User name or password is incorrect";
+                    }
+                        
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "User name or password is empty";
+                }
+
+            }
+            return View(userModelView);
+        }
+
+        public ActionResult Logout()
+        {
+            Session["UserID"] = null;
+            return RedirectToAction("Login");
         }
 
         protected override void Dispose(bool disposing)

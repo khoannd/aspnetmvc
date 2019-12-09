@@ -1,0 +1,31 @@
+﻿.title {
+    color: orangered;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.time {
+    font-size: 9px;
+    color: gray;
+}
+
+.short-description {
+    font-weight: bold;
+    font-size: 13pt;
+}
+
+.image {
+    margin: 10px 0;
+}
+
+.content {
+    margin: 10px 0;
+}
+
+.author {
+    text-align: right;
+    font-size: 13px;
+    font-weight: bold;
+    color: blueviolet;
+    position: relative;
+}

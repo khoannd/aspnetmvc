@@ -25,6 +25,15 @@ namespace NewsManagement
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/News/css").Include(
+                      "~/Content/news.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/editor").Include(
+                    "~/Scripts/editor.js"));
+
+            bundles.Add(new StyleBundle("~/Content/editor").Include(
+                    "~/Scripts/editor.css"));
         }
     }
 }

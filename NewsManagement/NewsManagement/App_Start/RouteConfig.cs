@@ -13,10 +13,19 @@ namespace NewsManagement
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapMvcAttributeRoutes();
+
             routes.MapRoute(
-                name: "Default",
+                name: "Category",
+                url: "Category/{category}/{name}",
+                defaults: new { controller = "PublicNews", action = "Index", category = UrlParameter.Optional, name = UrlParameter.Optional }
+            );
+
+
+            routes.MapRoute(
+                name: "PublicDefault",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "News", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "PublicNews", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

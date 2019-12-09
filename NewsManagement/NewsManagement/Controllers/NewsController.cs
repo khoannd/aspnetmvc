@@ -8,10 +8,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using NewsManagement;
+using NewsManagement.App_Start;
 using NewsManagement.Models;
 
 namespace NewsManagement.Controllers
 {
+    [Authorization]
     public class NewsController : Controller
     {
         private NewsEntities db = new NewsEntities();
@@ -97,6 +99,8 @@ namespace NewsManagement.Controllers
                         }
                     }
                 }
+
+                newNews.UserID = int.Parse(Session["UserID"].ToString());
                 
                 db.News.Add(newNews);
                 db.SaveChanges();
