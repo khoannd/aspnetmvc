@@ -15,20 +15,26 @@ namespace NewsManagement.Controllers
         private NewsEntities db = new NewsEntities();
 
         // GET: PublicNews
-        public ActionResult Index(int? category)
+        [Route("")]
+        [Route("category/{categoryid}/{name}")]
+        // abc.com/category/1/sport
+        public ActionResult Index(int? categoryid, string name)
         {
             var news = db.News.Include(n => n.User)
-                .Where(n => n.Categories.Any(c => category != null ? c.CategoryID == category : true) && n.Published)
-                .OrderByDescending(n => n.CreatedTime).Take(5);
-
-
+                .Where(
+                    n => categoryid != null ? n.Categories.Any(c => c.CategoryID == categoryid) : true
+                )
+                .OrderByDescending(n => n.CreatedTime)
+                .Take(3)
+                .Select( n => n);
             ViewBag.Categories = db.Categories;
+
             return View(news.ToList());
         }
 
-        // GET: PublicNews/Details/5
-        [Route("news/{name}-{id}")]
-        public ActionResult Details(string name, int? id)
+        // GET: detail/news-title-5.html
+        [Route("detail/{title}-{id}")]
+        public ActionResult Details(string title, int? id)
         {
             if (id == null)
             {
@@ -39,10 +45,14 @@ namespace NewsManagement.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Categories = db.Categories;
             return View(news);
         }
-        
+
+        public static string EncodeUrl(News news)
+        {
+            return string.Format("detail/{0}-{1}", HttpUtility.UrlEncode(news.Title), news.NewsID);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

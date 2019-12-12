@@ -21,7 +21,10 @@ namespace NewsManagement.Controllers
         // GET: News
         public ActionResult Index()
         {
-            var news = db.News.Include(n => n.User);
+            var news = db.News.Include(n => n.User)
+                .OrderByDescending(n => n.CreatedTime);
+
+
             return View(news.ToList());
         }
 
@@ -68,23 +71,26 @@ namespace NewsManagement.Controllers
                 // save image to disk
                 // /NewsImages/imagename.png
 
-                // create relative path
-                string relativePath = "/NewsImages/" + DateTime.Now.Ticks.ToString() + "_" + ImageFile.FileName;
-                // map the relative to physical path
-                string physicalPath = Server.MapPath(relativePath);
-
-                
-                // check if the image folder exists
-                string imageFolder = Path.GetDirectoryName(physicalPath);
-                if (!Directory.Exists(imageFolder))
+                if(ImageFile != null)
                 {
-                    Directory.CreateDirectory(imageFolder);
+                    // create relative path
+                    string relativePath = "/NewsImages/" + DateTime.Now.Ticks.ToString() + "_" + ImageFile.FileName;
+                    // map the relative to physical path
+                    string physicalPath = Server.MapPath(relativePath);
+
+
+                    // check if the image folder exists
+                    string imageFolder = Path.GetDirectoryName(physicalPath);
+                    if (!Directory.Exists(imageFolder))
+                    {
+                        Directory.CreateDirectory(imageFolder);
+                    }
+
+                    // save the image to physical path
+                    ImageFile.SaveAs(physicalPath);
+                    newsViewModel.ImageUrl = relativePath;
                 }
-
-                // save the image to physical path
-                ImageFile.SaveAs(physicalPath);
-                newsViewModel.ImageUrl = relativePath;
-
+                newsViewModel.UserID = int.Parse(Session["UserID"].ToString());
                 newsViewModel.UpdateNews(newNews);
 
                 //always check if the object null before usage
@@ -99,8 +105,6 @@ namespace NewsManagement.Controllers
                         }
                     }
                 }
-
-                newNews.UserID = int.Parse(Session["UserID"].ToString());
                 
                 db.News.Add(newNews);
                 db.SaveChanges();
@@ -149,7 +153,7 @@ namespace NewsManagement.Controllers
                 {
                     return HttpNotFound();
                 }
-
+                
                 // save image to disk
                 // /NewsImages/imagename.png
                 if (ImageFile != null)
@@ -170,10 +174,9 @@ namespace NewsManagement.Controllers
                     // save the image to physical path
                     ImageFile.SaveAs(physicalPath);
                     newsViewModel.ImageUrl = relativePath;
-                }                
+                }
 
                 newsViewModel.UpdateNews(newNews);
-
                 newNews.Categories.Clear();
 
                 //always check if the object null before usage
@@ -218,6 +221,8 @@ namespace NewsManagement.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             News news = db.News.Find(id);
+            news.Comments.Clear();
+            news.Categories.Clear();
             db.News.Remove(news);
             db.SaveChanges();
             return RedirectToAction("Index");

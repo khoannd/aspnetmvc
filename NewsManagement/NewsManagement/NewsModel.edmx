@@ -29,7 +29,7 @@
           <Property Name="NewsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Content" Type="varchar(max)" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CreatedTime" Type="datetime" Nullable="false" />
           <Property Name="ShortDesc" Type="nvarchar" MaxLength="255" />
           <Property Name="ImageUrl" Type="nvarchar" MaxLength="255" />
@@ -154,7 +154,7 @@
           <Property Name="NewsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_News" FromRole="News" ToRole="Comment" />
           <NavigationProperty Name="User" Relationship="Self.FK_News_User" FromRole="News" ToRole="User" />

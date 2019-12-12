@@ -1,16 +1,12 @@
 ﻿@model NewsManagement.News
 
 @{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_LayoutNews.cshtml";
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>News</h4>
-    <hr />
-    <div class="dl-horizontal">
+    <div>
         <div class="title">
             @Model.Title
         </div>
@@ -18,22 +14,17 @@
             @Model.CreatedTime
         </div>
         <div class="image">
-            <img src="@Model.ImageUrl" width="500" height="300" />
+            <img src="@Model.ImageUrl" />
         </div>
-
         <div class="short-description">
             @Model.ShortDesc
         </div>
-
         <div class="content">
             @Html.Raw(@Model.Content)
         </div>
-
         <div class="author">
-            @Model.User.UserName
+            @Model.User.FullName
         </div>
-
-
     </div>
 </div>
 <p>

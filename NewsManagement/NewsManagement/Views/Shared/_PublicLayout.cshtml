@@ -3,14 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - My News</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/News/css")
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-
+    @Styles.Render("~/news/abc")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,19 +17,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">HCMUTE NEWS</a>
-                
+                @Html.ActionLink("HCMUTE News", "Index", "PublicNews", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (ViewBag.Categories != null)
+                    @if(ViewBag.Categories != null)
                     {
-                        foreach (var item in ViewBag.Categories)
+                        foreach(Category cate in (IEnumerable<Category>)ViewBag.Categories)
                         {
-                            <li><a href="/Category/@item.CategoryID/@item.Name">@item.Name</a></li>
+                            <li><a href="/category/@cate.CategoryID/@cate.Name">@cate.Name</a></li>
                         }
                     }
-                    
                 </ul>
             </div>
         </div>
@@ -42,10 +36,12 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - HCMUTE News - <a href="/News">Admin Access</a></p>
+            <p>&copy; @DateTime.Now.Year - HCMUTE NEWS</p>
         </footer>
     </div>
 
-
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
 </body>
 </html>

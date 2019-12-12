@@ -150,7 +150,7 @@ namespace NewsManagement.Controllers
                     if(user != null)
                     {
                         Session["UserID"] = user.UserID;
-                        //Response.Cookies.Add(new HttpCookie("UserID", user.UserID.ToString())); // if we want to use cookie
+                        Response.Cookies.Add(new HttpCookie("UserID", user.UserID.ToString()));
                         return RedirectToAction("Index", "News");
                     }
                     else

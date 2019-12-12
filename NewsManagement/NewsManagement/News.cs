@@ -11,9 +11,7 @@ namespace NewsManagement
 {
     using System;
     using System.Collections.Generic;
-    using System.Web;
-    using System.Web.Mvc;
-
+    
     public partial class News
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -26,7 +24,6 @@ namespace NewsManagement
         public int NewsID { get; set; }
         public int UserID { get; set; }
         public string Title { get; set; }
-        [AllowHtml]
         public string Content { get; set; }
         public System.DateTime CreatedTime { get; set; }
         public string ShortDesc { get; set; }
@@ -38,8 +35,5 @@ namespace NewsManagement
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category> Categories { get; set; }
-        public List<int> CategoryID { get; set; }
-
-        public HttpPostedFile ImageFile { get; set; }
     }
 }

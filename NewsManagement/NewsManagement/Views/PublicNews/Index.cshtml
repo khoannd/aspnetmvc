@@ -2,58 +2,40 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_LayoutNews.cshtml";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
+
 <style>
-
-
+    .news-list-item {
+        margin: 10px 0;
+        padding: 5px;
+        clear: both;
+    }
+    .news-list-image {
+        float: left;
+        clear: both;
+        margin-right: 10px;
+    }
+    .news-list-image img {
+        border: none;
+        height: 150px;
+        width: 150px;
+    }
+    .news-list-title {
+        font-weight: bold;
+        font-size: 13pt;
+        margin-bottom: 5px;
+    }
+    .news-list-short {
+        color: darkslategray;
+    }
 </style>
 
-<h2>My News</h2>
+@foreach (var item in Model) {
+<div class="news-list-item">
+    <div class="news-list-image"><img src="@item.ImageUrl" /></div>
+    <div class="news-list-title"><a href="@NewsManagement.Controllers.PublicNewsController.EncodeUrl(item)" >@item.Title</a></div>
+    <div class="news-list-short">@item.ShortDesc</div>
+    </div>
+}
 
-<div>
-
-</div>
-
-
-<table class="table">
-    <tr>
-        <th>
-            Image
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ShortDesc)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.UserName)
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <img src="/NewsImages/@item.ImageUrl" height="50" width="50" />
-            </td>
-            <td>
-                <a href="/news/@item.Title-@item.NewsID"> @Html.DisplayFor(modelItem => item.Title)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShortDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-        </tr>
-    }
-
-</table>
